@@ -1,6 +1,6 @@
 import Card from "../Card";
 
-function Column({ title }) {
+function Column({ title, cards = [] }) {
   return (
     <div className="main__column column">
       <div className="column__title">
@@ -8,8 +8,9 @@ function Column({ title }) {
       </div>
 
       <div className="cards">
-        {/* пока статично 1 карточка; позже заменим на map по данным */}
-        <Card theme="orange" themeText="Web Design" date="30.10.23" />
+        {cards.map((card) => (
+          <Card key={card.id} topic={card.topic} title={card.title} date={card.date} />
+        ))}
       </div>
     </div>
   );
