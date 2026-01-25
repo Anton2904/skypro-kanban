@@ -1,12 +1,19 @@
-function Card({ theme = "orange", themeText = "Web Design", date = "30.10.23" }) {
-  const themeClass = theme === "green" ? "_green" : theme === "purple" ? "_purple" : "_orange";
+function getThemeClassByTopic(topic) {
+  // Тестовая логика окраски: достаточно для макета
+  if (topic === "Research") return "_green";
+  if (topic === "Copywriting") return "_purple";
+  return "_orange";
+}
+
+function Card({ topic = "Web Design", title = "Название задачи", date = "30.10.23" }) {
+  const themeClass = getThemeClassByTopic(topic);
 
   return (
     <div className="cards__item">
       <div className="cards__card card">
         <div className="card__group">
           <div className={`card__theme ${themeClass}`}>
-            <p className={themeClass}>{themeText}</p>
+            <p className={themeClass}>{topic}</p>
           </div>
 
           <a href="#popBrowse" target="_self">
@@ -20,7 +27,7 @@ function Card({ theme = "orange", themeText = "Web Design", date = "30.10.23" })
 
         <div className="card__content">
           <a href="" target="_blank" rel="noreferrer">
-            <h3 className="card__title">Название задачи</h3>
+            <h3 className="card__title">{title}</h3>
           </a>
 
           <div className="card__date">
