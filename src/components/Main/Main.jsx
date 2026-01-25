@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Column from "../Column";
 import { cardsData } from "../../../data";
+import { Container } from "../../styles/Common.styled";
+import { Content, Loading, MainBlock, MainRoot } from "./Main.styled";
 
 function Main() {
   const [isLoading, setIsLoading] = useState(true);
@@ -18,25 +20,21 @@ function Main() {
   const statuses = ["Без статуса", "Нужно сделать", "В работе", "Тестирование", "Готово"];
 
   return (
-    <main className="main">
-      <div className="container">
-        <div className="main__block">
+    <MainRoot>
+      <Container>
+        <MainBlock>
           {isLoading ? (
-            <div className="loading">Данные загружаются</div>
+            <Loading>Данные загружаются</Loading>
           ) : (
-            <div className="main__content">
+            <Content>
               {statuses.map((status) => (
-                <Column
-                  key={status}
-                  title={status}
-                  cards={cards.filter((card) => card.status === status)}
-                />
+                <Column key={status} title={status} cards={cards.filter((card) => card.status === status)} />
               ))}
-            </div>
+            </Content>
           )}
-        </div>
-      </div>
-    </main>
+        </MainBlock>
+      </Container>
+    </MainRoot>
   );
 }
 
