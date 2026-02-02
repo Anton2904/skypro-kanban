@@ -1,11 +1,12 @@
+import { Link } from "react-router-dom";
+
 function getThemeClassByTopic(topic) {
-  // Тестовая логика окраски: достаточно для макета
   if (topic === "Research") return "_green";
   if (topic === "Copywriting") return "_purple";
   return "_orange";
 }
 
-function Card({ topic = "Web Design", title = "Название задачи", date = "30.10.23" }) {
+function Card({ id, topic = "Web Design", title = "Название задачи", date = "30.10.23" }) {
   const themeClass = getThemeClassByTopic(topic);
 
   return (
@@ -16,19 +17,19 @@ function Card({ topic = "Web Design", title = "Название задачи", d
             <p className={themeClass}>{topic}</p>
           </div>
 
-          <a href="#popBrowse" target="_self">
+          <Link to={`/card/${id}`} target="_self" aria-label="Открыть карточку">
             <div className="card__btn">
               <div></div>
               <div></div>
               <div></div>
             </div>
-          </a>
+          </Link>
         </div>
 
         <div className="card__content">
-          <a href="" target="_blank" rel="noreferrer">
+          <Link to={`/card/${id}`} target="_self" rel="noreferrer">
             <h3 className="card__title">{title}</h3>
-          </a>
+          </Link>
 
           <div className="card__date">
             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none">
@@ -39,13 +40,9 @@ function Card({ topic = "Web Design", title = "Название задачи", d
                   strokeWidth="0.8"
                   strokeLinejoin="round"
                 />
-                <path
-                  d="M11.7812 4.0625H1.21875M3.25 1.21875V2.03125V1.21875ZM9.75 1.21875V2.03125V1.21875Z"
-                  stroke="#94A6BE"
-                  strokeWidth="0.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
+                <path d="M8.125 1.21875V2.84375" stroke="#94A6BE" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M4.875 1.21875V2.84375" stroke="#94A6BE" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M1.21875 4.46875H11.7812" stroke="#94A6BE" strokeWidth="0.8" strokeLinejoin="round" />
               </g>
               <defs>
                 <clipPath id="clip0_1_415">
@@ -53,7 +50,6 @@ function Card({ topic = "Web Design", title = "Название задачи", d
                 </clipPath>
               </defs>
             </svg>
-
             <p>{date}</p>
           </div>
         </div>

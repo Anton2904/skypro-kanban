@@ -1,13 +1,62 @@
+import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import Calendar from "../Calendar";
 
-function PopBrowse() {
+/**
+ * PopBrowse — попап просмотра/редактирования задачи.
+ * В рамках учебного проекта делаем предсказуемое UI-поведение:
+ * - "Закрыть" → возвращает на главную (/)
+ * - "Редактировать" → включает режим редактирования (показывает блок кнопок сохранения)
+ * - "Отменить" → возвращает режим просмотра
+ * - "Сохранить" → сохраняет (имитация) и возвращает режим просмотра
+ * - "Удалить" → подтверждение и возврат на главную
+ */
+function PopBrowse({ isOpen = false, cardId }) {
+  const navigate = useNavigate();
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [description, setDescription] = useState("");
+
+  const title = useMemo(() => "Название задачи", []);
+
+  const handleClose = (e) => {
+    e?.preventDefault?.();
+    navigate("/");
+  };
+
+  const handleEdit = (e) => {
+    e?.preventDefault?.();
+    setIsEditMode(true);
+  };
+
+  const handleCancel = (e) => {
+    e?.preventDefault?.();
+    setIsEditMode(false);
+  };
+
+  const handleSave = (e) => {
+    e?.preventDefault?.();
+    // Здесь будет сохранение (API / state). Пока — имитация.
+    setIsEditMode(false);
+  };
+
+  const handleDelete = (e) => {
+    e?.preventDefault?.();
+    const ok = window.confirm("Удалить задачу?\nДействие нельзя отменить.");
+    if (!ok) return;
+    // Здесь будет удаление (API / state). Пока — имитация.
+    navigate("/");
+  };
+
+  if (!isOpen) return null;
+
   return (
-    <div className="pop-browse" id="popBrowse">
+    <div className="pop-browse" id="popBrowse" style={{ display: "block" }}>
       <div className="pop-browse__container">
         <div className="pop-browse__block">
           <div className="pop-browse__content">
             <div className="pop-browse__top-block">
-              <h3 className="pop-browse__ttl">Название задачи</h3>
+              <h3 className="pop-browse__ttl">{title}</h3>
               <div className="categories__theme theme-top _orange _active-category">
                 <p className="_orange">Web Design</p>
               </div>
@@ -44,13 +93,15 @@ function PopBrowse() {
                     className="form-browse__area"
                     name="text"
                     id="textArea01"
-                    readOnly
+                    readOnly={!isEditMode}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
                     placeholder="Введите описание задачи..."
                   ></textarea>
                 </div>
               </form>
 
-              <Calendar mode="browse" />
+              <Calendar mode={isEditMode ? "edit" : "browse"} />
             </div>
 
             <div className="theme-down__categories theme-down">
@@ -60,36 +111,60 @@ function PopBrowse() {
               </div>
             </div>
 
-            <div className="pop-browse__btn-browse">
+            {/* ID показываем явно (полезно для проверки) */}
+            {cardId ? (
+              <p style={{ marginTop: 8, fontSize: 12, color: "#94A6BE" }}>ID: {cardId}</p>
+            ) : null}
+
+            {/* Кнопки просмотра */}
+            <div className={`pop-browse__btn-browse ${isEditMode ? "_hide" : ""}`.trim()}>
               <div className="btn-group">
-                <button className="btn-browse__edit _btn-bor _hover03">
-                  <a href="#">Редактировать задачу</a>
+                <button
+                  type="button"
+                  className="btn-browse__edit _btn-bor _hover03"
+                  onClick={handleEdit}
+                >
+                  Редактировать задачу
                 </button>
-                <button className="btn-browse__delete _btn-bor _hover03">
-                  <a href="#">Удалить задачу</a>
+                <button
+                  type="button"
+                  className="btn-browse__delete _btn-bor _hover03"
+                  onClick={handleDelete}
+                >
+                  Удалить задачу
                 </button>
               </div>
 
-              <button className="btn-browse__close _btn-bg _hover01">
-                <a href="#">Закрыть</a>
+              <button
+                type="button"
+                className="btn-browse__close _btn-bg _hover01"
+                onClick={handleClose}
+              >
+                Закрыть
               </button>
             </div>
 
-            <div className="pop-browse__btn-edit _hide">
+            {/* Кнопки редактирования */}
+            <div className={`pop-browse__btn-edit ${isEditMode ? "" : "_hide"}`.trim()}>
               <div className="btn-group">
-                <button className="btn-edit__edit _btn-bg _hover01">
-                  <a href="#">Сохранить</a>
+                <button type="button" className="btn-edit__edit _btn-bg _hover01" onClick={handleSave}>
+                  Сохранить
                 </button>
-                <button className="btn-edit__edit _btn-bor _hover03">
-                  <a href="#">Отменить</a>
+                <button type="button" className="btn-edit__edit _btn-bor _hover03" onClick={handleCancel}>
+                  Отменить
                 </button>
-                <button className="btn-edit__delete _btn-bor _hover03" id="btnDelete">
-                  <a href="#">Удалить задачу</a>
+                <button
+                  type="button"
+                  className="btn-edit__delete _btn-bor _hover03"
+                  id="btnDelete"
+                  onClick={handleDelete}
+                >
+                  Удалить задачу
                 </button>
               </div>
 
-              <button className="btn-edit__close _btn-bg _hover01">
-                <a href="#">Закрыть</a>
+              <button type="button" className="btn-edit__close _btn-bg _hover01" onClick={handleClose}>
+                Закрыть
               </button>
             </div>
           </div>
