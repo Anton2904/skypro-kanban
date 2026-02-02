@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 export const Page = styled.div`
   min-height: 100vh;
@@ -82,7 +83,7 @@ export const HelperText = styled.p`
 
 export const HelperLink = styled.span`
   display: inline-block;
-  margin-top: 8px;
+  margin-top: 0;
   text-align: center;
   font-size: 16px;
   color: #94a6be;
@@ -92,4 +93,11 @@ export const HelperLink = styled.span`
   &:hover {
     color: #565eef;
   }
+`;
+
+export const HelperLinkWrapper = styled(Link)`
+  margin-top: 8px;
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
 `;

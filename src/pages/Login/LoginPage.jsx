@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import { Card, Form, HelperLink, HelperText, Input, Page, PrimaryButton, Title } from "../_shared/AuthLayout.styled";
+import { Card, Form, HelperLink, HelperLinkWrapper, HelperText, Input, Page, PrimaryButton, Title } from "../_shared/AuthLayout.styled";
 
 function LoginPage({ isAuth, setIsAuth }) {
   const navigate = useNavigate();
@@ -44,9 +44,9 @@ function LoginPage({ isAuth, setIsAuth }) {
         </Form>
 
         <HelperText>Нужно зарегистрироваться?</HelperText>
-        <Link to="/register" style={{ textDecoration: "none" }}>
+        <HelperLinkWrapper to="/register">
           <HelperLink>Регистрируйтесь здесь</HelperLink>
-        </Link>
+        </HelperLinkWrapper>
       </Card>
     </Page>
   );
