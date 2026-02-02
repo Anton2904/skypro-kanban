@@ -1,43 +1,35 @@
 import { useState } from "react";
 import PopUser from "../PopUser";
+import { Container } from "../../styles/Common.styled";
+import { HeaderBlock, HeaderRoot, Logo, Nav, NewTaskButton, UserButton } from "./Header.styled";
 
 function Header() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   return (
-    <header className="header">
-      <div className="container">
-        <div className="header__block">
-          <div className="header__logo _show _light">
+    <HeaderRoot>
+      <Container>
+        <HeaderBlock>
+          <Logo>
             <a href="" target="_self" rel="noreferrer">
               <img src="images/logo.png" alt="logo" />
             </a>
-          </div>
+          </Logo>
 
-          <div className="header__logo _dark">
-            <a href="" target="_self" rel="noreferrer">
-              <img src="images/logo_dark.png" alt="logo" />
-            </a>
-          </div>
-
-          <nav className="header__nav">
-            <button className="header__btn-main-new _hover01" id="btnMainNew">
+          <Nav>
+            <NewTaskButton id="btnMainNew">
               <a href="#popNewCard">Создать новую задачу</a>
-            </button>
+            </NewTaskButton>
 
-            <button
-              type="button"
-              className="header__user _hover02"
-              onClick={() => setIsUserMenuOpen((prev) => !prev)}
-            >
+            <UserButton type="button" onClick={() => setIsUserMenuOpen((prev) => !prev)}>
               Ivan Ivanov
-            </button>
+            </UserButton>
 
             <PopUser isOpen={isUserMenuOpen} />
-          </nav>
-        </div>
-      </div>
-    </header>
+          </Nav>
+        </HeaderBlock>
+      </Container>
+    </HeaderRoot>
   );
 }
 

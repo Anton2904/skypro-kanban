@@ -1,36 +1,38 @@
-function getThemeClassByTopic(topic) {
+import { CardBody, CardItem, Content, DateRow, DotsButton, Group, Theme, Title } from "./Card.styled";
+
+function getThemeByTopic(topic) {
   // Тестовая логика окраски: достаточно для макета
-  if (topic === "Research") return "_green";
-  if (topic === "Copywriting") return "_purple";
-  return "_orange";
+  if (topic === "Research") return { bg: "#B4FDD1", color: "#06B16E" };
+  if (topic === "Copywriting") return { bg: "#E9D4FF", color: "#9A48F1" };
+  return { bg: "#FFE4C2", color: "#FF6D00" };
 }
 
 function Card({ topic = "Web Design", title = "Название задачи", date = "30.10.23" }) {
-  const themeClass = getThemeClassByTopic(topic);
+  const theme = getThemeByTopic(topic);
 
   return (
-    <div className="cards__item">
-      <div className="cards__card card">
-        <div className="card__group">
-          <div className={`card__theme ${themeClass}`}>
-            <p className={themeClass}>{topic}</p>
-          </div>
+    <CardItem>
+      <CardBody>
+        <Group>
+          <Theme $bg={theme.bg} $color={theme.color}>
+            <p>{topic}</p>
+          </Theme>
 
-          <a href="#popBrowse" target="_self">
-            <div className="card__btn">
+          <a href="#popBrowse" target="_self" aria-label="Открыть задачу">
+            <DotsButton>
               <div></div>
               <div></div>
               <div></div>
-            </div>
+            </DotsButton>
           </a>
-        </div>
+        </Group>
 
-        <div className="card__content">
+        <Content>
           <a href="" target="_blank" rel="noreferrer">
-            <h3 className="card__title">{title}</h3>
+            <Title>{title}</Title>
           </a>
 
-          <div className="card__date">
+          <DateRow>
             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none">
               <g clipPath="url(#clip0_1_415)">
                 <path
@@ -55,10 +57,10 @@ function Card({ topic = "Web Design", title = "Название задачи", d
             </svg>
 
             <p>{date}</p>
-          </div>
-        </div>
-      </div>
-    </div>
+          </DateRow>
+        </Content>
+      </CardBody>
+    </CardItem>
   );
 }
 
