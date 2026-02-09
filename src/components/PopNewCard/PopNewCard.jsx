@@ -1,8 +1,8 @@
 import Calendar from "../Calendar";
 
-function PopNewCard() {
+function PopNewCard({ isOpen = false }) {
   return (
-    <div className="pop-new-card" id="popNewCard">
+    <div className="pop-new-card" id="popNewCard" style={{ display: isOpen ? "block" : "none" }}>
       <div className="pop-new-card__container">
         <div className="pop-new-card__block">
           <div className="pop-new-card__content">

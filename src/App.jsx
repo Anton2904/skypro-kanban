@@ -1,27 +1,15 @@
-import Header from "./components/Header";
-import Main from "./components/Main";
-import PopNewCard from "./components/PopNewCard";
-import PopBrowse from "./components/PopBrowse";
+import { useState } from "react";
+
+import AppRoutes from "./routes/AppRoutes";
 
 import "./styles/popups.css";
 import { GlobalStyle } from "./styles/GlobalStyles";
 import { Wrapper } from "./App.styled";
 
 function App() {
-  return (
-    <>
-      <GlobalStyle />
-      <Wrapper>
-      {/* pop-ups */}
-      <PopNewCard />
-      <PopBrowse />
-      {/* /pop-ups */}
+  const [isAuth, setIsAuth] = useState(false);
 
-      <Header />
-      <Main />
-      </Wrapper>
-    </>
-  );
+  return <AppRoutes isAuth={isAuth} setIsAuth={setIsAuth} />;
 }
 
 export default App;

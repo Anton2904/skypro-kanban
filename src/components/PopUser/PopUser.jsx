@@ -1,44 +1,26 @@
-import { useState } from "react";
-import { ButtonRow, Modal, Overlay, PrimaryButton, SecondaryButton, Title } from "./PopExit.styled";
-import { ExitButton, Mail, Name, PopUserRoot, ThemeRow, ThemeToggle } from "./PopUser.styled";
+import { Link } from "react-router-dom";
 
 function PopUser({ isOpen }) {
   const [isExitOpen, setIsExitOpen] = useState(false);
 
   return (
-    <>
-      <PopUserRoot $isOpen={isOpen}>
-        <Name>Ivan Ivanov</Name>
-        <Mail>ivan.ivanov@gmail.com</Mail>
+    <div
+      className="header__pop-user-set pop-user-set"
+      id="user-set-target"
+      style={{ display: isOpen ? "block" : "none" }}
+    >
+      <p className="pop-user-set__name">Ivan Ivanov</p>
+      <p className="pop-user-set__mail">ivan.ivanov@gmail.com</p>
 
-        <ThemeRow>
-          <p>Темная тема</p>
-          <ThemeToggle name="checkbox" />
-        </ThemeRow>
+      <div className="pop-user-set__theme">
+        <p>Темная тема</p>
+        <input type="checkbox" className="checkbox" name="checkbox" />
+      </div>
 
-        <ExitButton type="button" onClick={() => setIsExitOpen(true)}>
-          Выйти
-        </ExitButton>
-      </PopUserRoot>
-
-      {isExitOpen ? (
-        <Overlay role="dialog" aria-modal="true" onClick={() => setIsExitOpen(false)}>
-          <Modal onClick={(e) => e.stopPropagation()}>
-            <Title>Выйти из аккаунта?</Title>
-
-            <ButtonRow>
-              <PrimaryButton type="button" onClick={() => (window.location.href = "modal/signin.html")}>
-                Да, выйти
-              </PrimaryButton>
-
-              <SecondaryButton type="button" onClick={() => setIsExitOpen(false)}>
-                Нет, остаться
-              </SecondaryButton>
-            </ButtonRow>
-          </Modal>
-        </Overlay>
-      ) : null}
-    </>
+      <button type="button" className="_hover03">
+        <Link to="/exit">Выйти</Link>
+      </button>
+    </div>
   );
 }
 

@@ -10,7 +10,7 @@ function Column({ title, cards = [] }) {
 
       <CardsList>
         {cards.map((card) => (
-          <Card key={card.id} topic={card.topic} title={card.title} date={card.date} />
+          <Card key={card.id} id={card.id} topic={card.topic} title={card.title} date={card.date} />
         ))}
       </CardsList>
     </ColumnRoot>
