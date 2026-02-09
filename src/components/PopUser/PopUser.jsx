@@ -1,14 +1,16 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 function PopUser({ isOpen }) {
+  const { user } = useAuth();
   return (
     <div
       className="header__pop-user-set pop-user-set"
       id="user-set-target"
       style={{ display: isOpen ? "block" : "none" }}
     >
-      <p className="pop-user-set__name">Ivan Ivanov</p>
-      <p className="pop-user-set__mail">ivan.ivanov@gmail.com</p>
+      <p className="pop-user-set__name">{user?.name || ""}</p>
+      <p className="pop-user-set__mail">{user?.login || ""}</p>
 
       <div className="pop-user-set__theme">
         <p>Темная тема</p>

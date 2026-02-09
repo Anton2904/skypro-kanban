@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 import { Card, Form, HelperLink, HelperLinkWrapper, HelperText, Input, Page, PrimaryButton, Title } from "../_shared/AuthLayout.styled";
 
-function RegisterPage({ isAuth, setIsAuth }) {
+function RegisterPage() {
   const navigate = useNavigate();
+  const { isAuth, register } = useAuth();
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [loginValue, setLoginValue] = useState("");
   const [password, setPassword] = useState("");
+  const [formError, setFormError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (isAuth) navigate("/", { replace: true });
@@ -15,9 +19,25 @@ function RegisterPage({ isAuth, setIsAuth }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // учебный сценарий: регистрация через UI
-    setIsAuth(true);
-    navigate("/", { replace: true });
+    setFormError("");
+    if (!name.trim()) {
+      setFormError("Введите имя");
+      return;
+    }
+    if (!loginValue.trim()) {
+      setFormError("Введите логин");
+      return;
+    }
+    if (!password.trim()) {
+      setFormError("Введите пароль");
+      return;
+    }
+
+    setIsSubmitting(true);
+    register({ login: loginValue.trim(), name: name.trim(), password })
+      .then(() => navigate("/", { replace: true }))
+      .catch((err) => setFormError(err?.message || "Ошибка регистрации"))
+      .finally(() => setIsSubmitting(false));
   };
 
   return (
@@ -28,11 +48,11 @@ function RegisterPage({ isAuth, setIsAuth }) {
         <Form onSubmit={handleSubmit}>
           <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Имя" />
           <Input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Эл. почта"
-            type="email"
-            autoComplete="email"
+            value={loginValue}
+            onChange={(e) => setLoginValue(e.target.value)}
+            placeholder="Логин"
+            type="text"
+            autoComplete="username"
           />
           <Input
             value={password}
@@ -42,7 +62,11 @@ function RegisterPage({ isAuth, setIsAuth }) {
             autoComplete="new-password"
           />
 
-          <PrimaryButton type="submit">Зарегистрироваться</PrimaryButton>
+          {formError ? <div style={{ color: "#c00", fontSize: 14 }}>{formError}</div> : null}
+
+          <PrimaryButton type="submit" disabled={isSubmitting} aria-disabled={isSubmitting}>
+            {isSubmitting ? "Регистрируем..." : "Зарегистрироваться"}
+          </PrimaryButton>
         </Form>
 
         <HelperText>Уже есть аккаунт?</HelperText>

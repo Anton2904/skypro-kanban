@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 import PopUser from "../PopUser";
 
 function Header() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   return (
     <header className="header">
@@ -38,7 +40,7 @@ function Header() {
               className="header__user _hover02"
               onClick={() => setIsUserMenuOpen((prev) => !prev)}
             >
-              Ivan Ivanov
+              {user?.name || user?.login || "Пользователь"}
             </button>
 
             <PopUser isOpen={isUserMenuOpen} />
