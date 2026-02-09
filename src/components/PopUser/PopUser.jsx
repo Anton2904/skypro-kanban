@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 
 function PopUser({ isOpen }) {
+  const [isExitOpen, setIsExitOpen] = useState(false);
+
   return (
     <div
       className="header__pop-user-set pop-user-set"

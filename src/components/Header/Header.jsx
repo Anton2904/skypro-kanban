@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import PopUser from "../PopUser";
+import { Container } from "../../styles/Common.styled";
+import { HeaderBlock, HeaderRoot, Logo, Nav, NewTaskButton, UserButton } from "./Header.styled";
 
 function Header() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -33,19 +35,15 @@ function Header() {
               Создать новую задачу
             </button>
 
-            <button
-              type="button"
-              className="header__user _hover02"
-              onClick={() => setIsUserMenuOpen((prev) => !prev)}
-            >
+            <UserButton type="button" onClick={() => setIsUserMenuOpen((prev) => !prev)}>
               Ivan Ivanov
-            </button>
+            </UserButton>
 
             <PopUser isOpen={isUserMenuOpen} />
-          </nav>
-        </div>
-      </div>
-    </header>
+          </Nav>
+        </HeaderBlock>
+      </Container>
+    </HeaderRoot>
   );
 }
 
