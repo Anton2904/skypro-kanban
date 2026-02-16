@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { formatDateRu } from "../../utils/date";
 
 function getThemeClassByTopic(topic) {
   if (topic === "Research") return "_green";
@@ -6,8 +7,9 @@ function getThemeClassByTopic(topic) {
   return "_orange";
 }
 
-function Card({ id, topic = "Web Design", title = "Название задачи", date = "30.10.23" }) {
+function Card({ id, topic = "Web Design", title = "Название задачи", date = "" }) {
   const themeClass = getThemeClassByTopic(topic);
+  const dateText = date ? formatDateRu(date) : "";
 
   return (
     <CardItem>
@@ -50,11 +52,11 @@ function Card({ id, topic = "Web Design", title = "Название задачи
                 </clipPath>
               </defs>
             </svg>
-            <p>{date}</p>
-          </DateRow>
-        </Content>
-      </CardBody>
-    </CardItem>
+            <p>{dateText}</p>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 

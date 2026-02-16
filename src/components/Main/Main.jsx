@@ -1,40 +1,39 @@
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import Column from "../Column";
-import { cardsData } from "../../../data";
-import { Container } from "../../styles/Common.styled";
-import { Content, Loading, MainBlock, MainRoot } from "./Main.styled";
+import { useTasks } from "../../context/TasksContext";
 
 function Main() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [cards, setCards] = useState([]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setCards(cardsData);
-      setIsLoading(false);
-    }, 1200);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  const statuses = ["Без статуса", "Нужно сделать", "В работе", "Тестирование", "Готово"];
+  const { tasks, loading, error, fetchTasks } = useTasks();
+  const statuses = useMemo(
+    () => ["Без статуса", "Нужно сделать", "В работе", "Тестирование", "Готово"],
+    []
+  );
 
   return (
-    <MainRoot>
-      <Container>
-        <MainBlock>
-          {isLoading ? (
-            <Loading>Данные загружаются</Loading>
-          ) : (
-            <Content>
+    <main className="main">
+      <div className="container">
+        <div className="main__block">
+          {loading ? <div className="loading">Данные загружаются...</div> : null}
+
+          {!loading && error ? (
+            <div className="loading" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <div>Ошибка: {error}</div>
+              <button type="button" className="_hover01" onClick={fetchTasks}>
+                Повторить
+              </button>
+            </div>
+          ) : null}
+
+          {!loading && !error ? (
+            <div className="main__content">
               {statuses.map((status) => (
-                <Column key={status} title={status} cards={cards.filter((card) => card.status === status)} />
+                <Column key={status} title={status} cards={tasks.filter((card) => card.status === status)} />
               ))}
-            </Content>
-          )}
-        </MainBlock>
-      </Container>
-    </MainRoot>
+            </div>
+          ) : null}
+        </div>
+      </div>
+    </main>
   );
 }
 

@@ -1,11 +1,13 @@
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
-function ExitPage({ setIsAuth }) {
+function ExitPage() {
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   const handleYes = (e) => {
     e.preventDefault();
-    setIsAuth(false);
+    logout();
     navigate("/login", { replace: true });
   };
 

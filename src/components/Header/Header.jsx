@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 import PopUser from "../PopUser";
 import { Container } from "../../styles/Common.styled";
@@ -8,6 +9,7 @@ import { HeaderBlock, HeaderRoot, Logo, Nav, NewTaskButton, UserButton } from ".
 function Header() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   return (
     <header className="header">
@@ -35,9 +37,13 @@ function Header() {
               Создать новую задачу
             </button>
 
-            <UserButton type="button" onClick={() => setIsUserMenuOpen((prev) => !prev)}>
-              Ivan Ivanov
-            </UserButton>
+            <button
+              type="button"
+              className="header__user _hover02"
+              onClick={() => setIsUserMenuOpen((prev) => !prev)}
+            >
+              {user?.name || user?.login || "Пользователь"}
+            </button>
 
             <PopUser isOpen={isUserMenuOpen} />
           </Nav>

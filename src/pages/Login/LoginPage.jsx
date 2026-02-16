@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 import { Card, Form, HelperLink, HelperLinkWrapper, HelperText, Input, Page, PrimaryButton, Title } from "../_shared/AuthLayout.styled";
 
-function LoginPage({ isAuth, setIsAuth }) {
+function LoginPage() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const { isAuth, login } = useAuth();
+  const [loginValue, setLoginValue] = useState("");
   const [password, setPassword] = useState("");
+  const [formError, setFormError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (isAuth) navigate("/", { replace: true });
@@ -14,9 +18,21 @@ function LoginPage({ isAuth, setIsAuth }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // учебный сценарий: вход только через UI
-    setIsAuth(true);
-    navigate("/", { replace: true });
+    setFormError("");
+    if (!loginValue.trim()) {
+      setFormError("Введите логин");
+      return;
+    }
+    if (!password.trim()) {
+      setFormError("Введите пароль");
+      return;
+    }
+
+    setIsSubmitting(true);
+    login({ login: loginValue.trim(), password })
+      .then(() => navigate("/", { replace: true }))
+      .catch((err) => setFormError(err?.message || "Ошибка авторизации"))
+      .finally(() => setIsSubmitting(false));
   };
 
   return (
@@ -26,11 +42,11 @@ function LoginPage({ isAuth, setIsAuth }) {
 
         <Form onSubmit={handleSubmit}>
           <Input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Эл. почта"
-            type="email"
-            autoComplete="email"
+            value={loginValue}
+            onChange={(e) => setLoginValue(e.target.value)}
+            placeholder="Логин"
+            type="text"
+            autoComplete="username"
           />
           <Input
             value={password}
@@ -40,7 +56,11 @@ function LoginPage({ isAuth, setIsAuth }) {
             autoComplete="current-password"
           />
 
-          <PrimaryButton type="submit">Войти</PrimaryButton>
+          {formError ? <div style={{ color: "#c00", fontSize: 14 }}>{formError}</div> : null}
+
+          <PrimaryButton type="submit" disabled={isSubmitting} aria-disabled={isSubmitting}>
+            {isSubmitting ? "Входим..." : "Войти"}
+          </PrimaryButton>
         </Form>
 
         <HelperText>Нужно зарегистрироваться?</HelperText>
