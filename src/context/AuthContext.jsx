@@ -1,3 +1,4 @@
+//Файл AuthContext
 import { createContext, useContext, useMemo, useState } from "react";
 import { loginUser, registerUser } from "../services/user";
 import {
