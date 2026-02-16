@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 import PopUser from "../PopUser";
+import { Container } from "../../styles/Common.styled";
+import { HeaderBlock, HeaderRoot, Logo, Nav, NewTaskButton, UserButton } from "./Header.styled";
 
 function Header() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -44,10 +46,10 @@ function Header() {
             </button>
 
             <PopUser isOpen={isUserMenuOpen} />
-          </nav>
-        </div>
-      </div>
-    </header>
+          </Nav>
+        </HeaderBlock>
+      </Container>
+    </HeaderRoot>
   );
 }
 

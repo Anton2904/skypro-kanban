@@ -12,12 +12,12 @@ function Card({ id, topic = "Web Design", title = "Название задачи
   const dateText = date ? formatDateRu(date) : "";
 
   return (
-    <div className="cards__item">
-      <div className="cards__card card">
-        <div className="card__group">
-          <div className={`card__theme ${themeClass}`}>
-            <p className={themeClass}>{topic}</p>
-          </div>
+    <CardItem>
+      <CardBody>
+        <Group>
+          <Theme $bg={theme.bg} $color={theme.color}>
+            <p>{topic}</p>
+          </Theme>
 
           <Link to={`/card/${id}`} target="_self" aria-label="Открыть карточку">
             <div className="card__btn">
@@ -33,7 +33,7 @@ function Card({ id, topic = "Web Design", title = "Название задачи
             <h3 className="card__title">{title}</h3>
           </Link>
 
-          <div className="card__date">
+          <DateRow>
             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none">
               <g clipPath="url(#clip0_1_415)">
                 <path
