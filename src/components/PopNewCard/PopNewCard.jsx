@@ -52,7 +52,7 @@ function PopNewCard({ isOpen = false }) {
     }
 
     setIsSubmitting(true);
-    const ok = await createTask({
+    const result = await createTask({
       title: title.trim(),
       topic,
       status,
@@ -61,10 +61,10 @@ function PopNewCard({ isOpen = false }) {
     });
     setIsSubmitting(false);
 
-    if (ok) {
+    if (result.ok) {
       navigate("/", { replace: true });
     } else {
-      setFormError("Не удалось создать задачу. Проверьте данные и повторите.");
+      setFormError(result.message || "Не удалось создать задачу. Проверьте данные и повторите.");
     }
   };
 
