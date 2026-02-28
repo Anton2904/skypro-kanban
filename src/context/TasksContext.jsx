@@ -1,5 +1,5 @@
-//Файл TasksContext
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import * as kanbanApi from "../services/kanban";
 import { useAuth } from "./AuthContext";
 
@@ -45,7 +45,6 @@ export function TasksProvider({ children }) {
       return;
     }
     fetchTasks();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuth]);
 
   const createTask = async (task) => {
@@ -53,10 +52,11 @@ export function TasksProvider({ children }) {
     try {
       const raw = await kanbanApi.createTask(task);
       setTasks(raw.map(normalizeTask));
-      return true;
+      return { ok: true };
     } catch (e) {
-      setError(e?.message || "Не удалось создать задачу");
-      return false;
+      const message = e?.message || "Не удалось создать задачу";
+      setError(message);
+      return { ok: false, message };
     }
   };
 
@@ -65,10 +65,11 @@ export function TasksProvider({ children }) {
     try {
       const raw = await kanbanApi.updateTask(id, task);
       setTasks(raw.map(normalizeTask));
-      return true;
+      return { ok: true };
     } catch (e) {
-      setError(e?.message || "Не удалось сохранить задачу");
-      return false;
+      const message = e?.message || "Не удалось сохранить задачу";
+      setError(message);
+      return { ok: false, message };
     }
   };
 
@@ -77,18 +78,19 @@ export function TasksProvider({ children }) {
     try {
       const raw = await kanbanApi.deleteTask(id);
       setTasks(raw.map(normalizeTask));
-      return true;
+      return { ok: true };
     } catch (e) {
-      setError(e?.message || "Не удалось удалить задачу");
-      return false;
+      const message = e?.message || "Не удалось удалить задачу";
+      setError(message);
+      return { ok: false, message };
     }
   };
 
-  const getTaskLocal = (id) => tasks.find((t) => t.id === id) || null;
+  const getTaskLocal = useCallback((id) => tasks.find((t) => t.id === id) || null, [tasks]);
 
   const value = useMemo(
     () => ({ tasks, loading, error, fetchTasks, createTask, updateTask, deleteTask, getTaskLocal }),
-    [tasks, loading, error]
+    [tasks, loading, error, getTaskLocal]
   );
 
   return <TasksContext.Provider value={value}>{children}</TasksContext.Provider>;

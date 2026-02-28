@@ -1,5 +1,5 @@
-//Файл AuthContext
-import { createContext, useContext, useMemo, useState } from "react";
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, useCallback, useContext, useMemo, useState } from "react";
 import { loginUser, registerUser } from "../services/user";
 import {
   clearAuthStorage,
@@ -16,36 +16,36 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => getStoredUser());
   const [isAuth, setIsAuth] = useState(() => Boolean(getToken()));
 
-  const applyAuth = (nextUser) => {
+  const applyAuth = useCallback((nextUser) => {
     setToken(nextUser.token);
     setStoredUser({ id: nextUser.id, login: nextUser.login, name: nextUser.name });
     setTokenState(nextUser.token);
     setUser({ id: nextUser.id, login: nextUser.login, name: nextUser.name });
     setIsAuth(true);
-  };
+  }, []);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     clearAuthStorage();
     setTokenState("");
     setUser(null);
     setIsAuth(false);
-  };
+  }, []);
 
-  const login = async ({ login, password }) => {
+  const login = useCallback(async ({ login, password }) => {
     const nextUser = await loginUser({ login, password });
     applyAuth(nextUser);
     return nextUser;
-  };
+  }, [applyAuth]);
 
-  const register = async ({ login, name, password }) => {
+  const register = useCallback(async ({ login, name, password }) => {
     const nextUser = await registerUser({ login, name, password });
     applyAuth(nextUser);
     return nextUser;
-  };
+  }, [applyAuth]);
 
   const value = useMemo(
     () => ({ isAuth, token, user, login, register, logout }),
-    [isAuth, token, user]
+    [isAuth, token, user, login, register, logout]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

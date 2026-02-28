@@ -816,6 +816,36 @@ body {
   font-weight: 500;
   color: #94A6BE;
 }
+
+@keyframes loader-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #94A6BE;
+}
+
+.loader__spinner {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 3px solid rgba(148, 166, 190, 0.35);
+  border-top-color: #94A6BE;
+  animation: loader-spin 900ms linear infinite;
+}
+
+.loader__text {
+  font-size: 18px;
+  font-weight: 500;
+}
 .main__content {
   width: 100%;
   display: flex;
