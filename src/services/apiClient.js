@@ -22,18 +22,21 @@ export async function apiRequest(path, { method = "GET", body, headers } = {}) {
   const token = getToken();
   const url = path.startsWith("http") ? path : `${API_BASE}${path}`;
 
-  
   const finalHeaders = {
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...(headers || {}),
   };
 
-  const res = await fetch(url, {
-    method,
-    headers: finalHeaders,
-    // JSON всё равно отправляем, но без ручного Content-Type
-    body: body ? JSON.stringify(body) : undefined,
-  });
+  let res;
+  try {
+    res = await fetch(url, {
+      method,
+      headers: finalHeaders,
+      body: body ? JSON.stringify(body) : undefined,
+    });
+  } catch {
+    throw new Error("Сервер недоступен. Проверьте интернет и повторите попытку.");
+  }
 
   if (!res.ok) {
     const message = await readErrorBody(res);

@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import Column from "../Column";
+import Loader from "../Loader";
 import { useTasks } from "../../context/TasksContext";
 
 function Main() {
@@ -13,7 +14,11 @@ function Main() {
     <main className="main">
       <div className="container">
         <div className="main__block">
-          {loading ? <div className="loading">Данные загружаются...</div> : null}
+          {loading ? (
+            <div className="loading">
+              <Loader label="Данные загружаются..." />
+            </div>
+          ) : null}
 
           {!loading && error ? (
             <div className="loading" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
@@ -25,11 +30,21 @@ function Main() {
           ) : null}
 
           {!loading && !error ? (
-            <div className="main__content">
-              {statuses.map((status) => (
-                <Column key={status} title={status} cards={tasks.filter((card) => card.status === status)} />
-              ))}
-            </div>
+            <>
+              {tasks.length === 0 ? (
+                <div className="loading">Новых задач нет</div>
+              ) : (
+                <div className="main__content">
+                  {statuses.map((status) => (
+                    <Column
+                      key={status}
+                      title={status}
+                      cards={tasks.filter((card) => card.status === status)}
+                    />
+                  ))}
+                </div>
+              )}
+            </>
           ) : null}
         </div>
       </div>

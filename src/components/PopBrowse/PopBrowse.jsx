@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useTasks } from "../../context/TasksContext";
 import { formatDateRu, fromDateInputToIso, toIsoDateInputValue } from "../../utils/date";
 import { getTaskById } from "../../services/kanban";
+import Loader from "../Loader";
 
 function getThemeClassByTopic(topic) {
   if (topic === "Research") return "_green";
@@ -33,17 +34,21 @@ function PopBrowse({ isOpen = false, cardId }) {
 
     const local = getTaskLocal(cardId);
     if (local) {
-      setTitle(local.title || "");
-      setDescription(local.description || "");
-      setTopic(local.topic || "Research");
-      setStatus(local.status || "Без статуса");
-      setDateValue(toIsoDateInputValue(local.date));
+      Promise.resolve().then(() => {
+        setTitle(local.title || "");
+        setDescription(local.description || "");
+        setTopic(local.topic || "Research");
+        setStatus(local.status || "Без статуса");
+        setDateValue(toIsoDateInputValue(local.date));
+      });
       return;
     }
 
     // если в сторе нет (например, прямая ссылка), тянем с сервера
-    setLoading(true);
-    setError("");
+    Promise.resolve().then(() => {
+      setLoading(true);
+      setError("");
+    });
     getTaskById(cardId)
       .then((task) => {
         setTitle(task?.title || "");
@@ -90,7 +95,7 @@ function PopBrowse({ isOpen = false, cardId }) {
       return;
     }
 
-    const ok = await updateTask(cardId, {
+    const result = await updateTask(cardId, {
       title: title.trim(),
       topic,
       status,
@@ -98,17 +103,17 @@ function PopBrowse({ isOpen = false, cardId }) {
       date: fromDateInputToIso(dateValue),
     });
 
-    if (ok) setIsEditMode(false);
-    else setError("Не удалось сохранить изменения");
+    if (result.ok) setIsEditMode(false);
+    else setError(result.message || "Не удалось сохранить изменения");
   };
 
   const handleDelete = async (e) => {
     e?.preventDefault?.();
     const ok = window.confirm("Удалить задачу?\nДействие нельзя отменить.");
     if (!ok) return;
-    const deleted = await deleteTask(cardId);
-    if (deleted) navigate("/", { replace: true });
-    else setError("Не удалось удалить задачу");
+    const result = await deleteTask(cardId);
+    if (result.ok) navigate("/", { replace: true });
+    else setError(result.message || "Не удалось удалить задачу");
   };
 
   if (!isOpen) return null;
@@ -125,7 +130,11 @@ function PopBrowse({ isOpen = false, cardId }) {
               </div>
             </div>
 
-            {loading ? <div className="loading">Загружаем задачу...</div> : null}
+            {loading ? (
+              <div className="loading">
+                <Loader label="Загружаем задачу..." />
+              </div>
+            ) : null}
             {!loading && error ? <div style={{ color: "#c00", marginTop: 8 }}>{error}</div> : null}
 
             <div className="pop-browse__wrap">
